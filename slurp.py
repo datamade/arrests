@@ -7,7 +7,7 @@ BASE_URL = "http://publicsearch1.chicagopolice.org/api/Arrests/Search?&StartDate
 outfile = 'pages/{}.json'
         
 cache = scrapelib.cache.FileCache('_cache')        
-s = scrapelib.Scraper(requests_per_minute=20)
+s = scrapelib.Scraper(requests_per_minute=30)
 s.cache_storage = cache
 s.cache_write_only = False
 
@@ -25,6 +25,4 @@ while True:
     if len(response.json()) < 100:
         break
     page += 1
-    if page > 3:
-        break
         
