@@ -1,14 +1,13 @@
 import json
 import psycopg2
-import os
 import itertools
+import glob
 
 con = psycopg2.connect(database="arrests")
 c = con.cursor()
 
-for fn in os.listdir('pages'):
-    print(fn)
-    with open('pages/' + fn) as infile :
+for fn in glob.glob('pages/*.json'):
+    with open(fn) as infile :
         page = json.load(infile)
         for row in page:
             c.execute("SELECT arrest_event_id "
