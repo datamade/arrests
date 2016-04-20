@@ -88,3 +88,13 @@ lockup :
 
 charges.json :
 	python3 slurp_charges.py
+
+incidents.csv :
+	wget -O $@ "https://data.cityofchicago.org/api/views/ijzp-q8t2/rows.csv?accessType=DOWNLOAD"
+
+inidents : incidents.csv
+	$(check_relation) csvsql --db postgresql:///arrests --table $@ --insert $< 
+
+
+crosswalk : incidents
+	select DISTINCT ON (arrest_event_id) * from arrest_event inner join incidents on (regexp_replace(street_number, '..$', 'XX') || ' ' || street_direction || ' ' || street_name) = "BLOCK" AND arrest_time - "DATE  OF OCCURRENCE" < interval '1 hour' AND arrest_time - "DATE  OF OCCURRENCE" > interval '-1 hour' AND "ARREST" = True INNER JOIN arrest using (arrest_event_id) INNER JOIN arrest_charges using (arrest_id) INNER JOIN charges using (charge_code) limit 100;
