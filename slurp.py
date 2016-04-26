@@ -9,10 +9,9 @@ outfile = 'pages/{}.json'
 cache = scrapelib.cache.FileCache('_cache')        
 s = scrapelib.Scraper(requests_per_minute=30)
 s.cache_storage = cache
-s.cache_write_only = False
 
-
-url = BASE_URL.format(date=datetime.date(2014, 1, 1))
+start_date = datetime.date.today() - datetime.timedelta(days=4)
+url = BASE_URL.format(date=start_date)
 
 page = 0
 while True:

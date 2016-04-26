@@ -92,9 +92,19 @@ charges.json :
 incidents.csv :
 	wget -O $@ "https://data.cityofchicago.org/api/views/ijzp-q8t2/rows.csv?accessType=DOWNLOAD"
 
-inidents : incidents.csv
+incidents : incidents.csv
 	$(check_relation) csvsql --db postgresql:///arrests --table $@ --insert $< 
 
 
-crosswalk : incidents
-	select DISTINCT ON (arrest_event_id) * from arrest_event inner join incidents on (regexp_replace(street_number, '..$', 'XX') || ' ' || street_direction || ' ' || street_name) = "BLOCK" AND arrest_time - "DATE  OF OCCURRENCE" < interval '1 hour' AND arrest_time - "DATE  OF OCCURRENCE" > interval '-1 hour' AND "ARREST" = True INNER JOIN arrest using (arrest_event_id) INNER JOIN arrest_charges using (arrest_id) INNER JOIN charges using (charge_code) limit 100;
+arrest_event_incident : incidents arrest_event
+	$(check_relation) psql -d $(PG_DB) -c \
+            "CREATE TABLE $@ AS \
+             SELECT \"CASE#\", arrest_event_id \
+             FROM arrest_event INNER JOIN incidents \
+             ON concat_ws(' ', lpad(CASE WHEN length(street_number) < 3 \
+                                         THEN 'X' \
+                                         ELSE regexp_replace(street_number, '..$$', 'XX') \
+                                    END, 5, '0'), street_direction, street_name) = \"BLOCK\" \
+                 AND arrest_time - \"DATE  OF OCCURRENCE\" < interval '2 hour' \
+                 AND arrest_time - \"DATE  OF OCCURRENCE\" > interval '-1 hour' \
+                 AND \"ARREST\" = True"
