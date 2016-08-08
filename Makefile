@@ -20,7 +20,6 @@ arrest :
 	$(check_relation) psql -d $(PG_DB) -c \
             "CREATE TABLE $@ (arrest_id INT PRIMARY KEY, \
                               central_booking INT, \
-                              individual_record INT, \
                               arrest_event_id INT, \
                               fbi_code TEXT)"
 
@@ -39,7 +38,6 @@ arrest_event :
 arrestee :
 	$(check_relation) psql -d $(PG_DB) -c \
             "CREATE TABLE $@ (arrest_id INT PRIMARY KEY, \
-                              individual_record INT, \
                               first_name TEXT, \
                               middle_name TEXT, \
                               last_name TEXT, \
@@ -49,7 +47,6 @@ arrestee :
 arrestee_address :
 	$(check_relation) psql -d $(PG_DB) -c \
             "CREATE TABLE $@ (arrest_id INT PRIMARY KEY, \
-                              individual_record INT, \
                               street_number TEXT, \
                               street_direction TEXT, \
                               street_name TEXT, \
