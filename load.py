@@ -49,7 +49,7 @@ for fn in glob.glob('pages/*.json'):
                       "VALUES "
                       "(%(Id)s, %(OffenderStreetNo)s, "
                       "%(OffenderStreetDirection)s, %(OffenderStreetName)s, "
-                      "%(OffenderCity)s, %(OffenderStateCode)s "
+                      "%(OffenderCity)s, %(OffenderStateCode)s) "
                       "ON CONFLICT DO NOTHING",
                       page)
 
