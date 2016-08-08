@@ -3,7 +3,7 @@ define check_relation
  psql -d $(PG_DB) -c "\d $@" > /dev/null 2>&1 ||
 endef
 
-.PHONY : load
+.PHONY : load_data
 load_data : slurp tables
 	python3 load.py
 	-rm pages/*

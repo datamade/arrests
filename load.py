@@ -31,19 +31,25 @@ for fn in glob.glob('pages/*.json'):
                 con.commit()
                 
             row['arrest_event_id'] = arrest_event_id[0]
-            if 'IrNo' not in row:
-                row['IrNo'] = None
             c.execute("INSERT INTO arrest "
                       "VALUES "
-                      "(%(Id)s, %(CbNo)s, %(IrNo)s, %(arrest_event_id)s, "
+                      "(%(Id)s, %(CbNo)s, %(arrest_event_id)s, "
                       " %(FBICode)s) "
                       "ON CONFLICT DO NOTHING",
                       row)
 
         c.executemany("INSERT INTO arrestee "
                       "VALUES "
-                      "(%(Id)s, %(IrNo)s, %(FirstName)s, %(MiddleName)s, "
+                      "(%(Id)s, %(FirstName)s, %(MiddleName)s, "
                       " %(LastName)s, %(Age)s, %(MugshotId)s) "
+                      "ON CONFLICT DO NOTHING",
+                      page)
+
+        c.executemany("INSERT INTO arresstee_address "
+                      "VALUES "
+                      "(%(Id)s, %(OffenderStreetNo)s, "
+                      "%(OffenderStreetDirection)s, %(OffenderStreetName)s, "
+                      "%(OffenderCity)s, %(OffenderStateCode)s "
                       "ON CONFLICT DO NOTHING",
                       page)
 
