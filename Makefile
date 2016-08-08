@@ -9,6 +9,7 @@ load : slurp tables
 
 .PHONY: slurp
 slurp :
+	-rm pages/*
 	python3 slurp.py
 
 .PHONY : tables
