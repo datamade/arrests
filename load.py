@@ -45,7 +45,7 @@ for fn in glob.glob('pages/*.json'):
                       "ON CONFLICT DO NOTHING",
                       page)
 
-        c.executemany("INSERT INTO arresstee_address "
+        c.executemany("INSERT INTO arrestee_address "
                       "VALUES "
                       "(%(Id)s, %(OffenderStreetNo)s, "
                       "%(OffenderStreetDirection)s, %(OffenderStreetName)s, "
