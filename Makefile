@@ -4,12 +4,12 @@ define check_relation
 endef
 
 .PHONY : load
-load : slurp tables
+load_data : slurp tables
 	python3 load.py
+	-rm pages/*
 
 .PHONY: slurp
 slurp :
-	-rm pages/*
 	python3 slurp.py
 
 .PHONY : tables
